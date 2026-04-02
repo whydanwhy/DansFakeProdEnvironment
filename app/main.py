@@ -1,0 +1,34 @@
+import time
+
+from fastapi import FastAPI, Request
+
+from app.api import tickets
+from app.db.database import init_db
+from app.core.logger import logger
+
+app = FastAPI()
+
+logger.info("Starting application")
+
+init_db()
+
+app.include_router(tickets.router)
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logger.info(f"Incoming request: {request.method} {request.url.path}")
+    
+    start_time = time.time()
+
+    response = await call_next(request)
+
+    duration = time.time() - start_time
+
+    logger.info(
+    f"{request.method} {request.url.path} "
+    f"completed in {duration:.4f}s "
+    f"status={response.status_code}"
+    )
+
+    return response
