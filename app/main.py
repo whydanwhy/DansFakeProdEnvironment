@@ -1,3 +1,8 @@
+"""
+App entry point.
+
+Initialises the FASTAPI application, sets up logging, middle ware and registers API routes.
+"""
 import time
 
 from fastapi import FastAPI, Request

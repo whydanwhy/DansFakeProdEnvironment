@@ -1,3 +1,9 @@
+"""
+Ticket Service Layer.
+
+Contains business logic for ticket operations.
+Includes database connection and data transformations.
+"""
 from app.db.database import get_connection
 from app.core.logger import logger
 

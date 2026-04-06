@@ -1,3 +1,8 @@
+"""
+Database config and connection management
+
+Initialises the utilities for the app.
+"""
 import sqlite3
 
 def get_connection():

@@ -1,3 +1,9 @@
+"""
+Ticket API routes.
+
+Handles HTTP requests related to ticket operations,
+Including creating a retrieving tickets.
+"""
 from fastapi import APIRouter
 from app.services.ticket_service import get_all_tickets, create_ticket
 from app.schemas.ticket import TicketResponse, TicketCreate
