@@ -14,3 +14,8 @@ class TicketCreate(BaseModel):
 
 class TicketResponse(BaseModel):
     tickets: List[Ticket]
+
+
+class TicketUpdate(BaseModel):
+    title: str
+    description: str

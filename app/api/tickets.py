@@ -5,8 +5,8 @@ Handles HTTP requests related to ticket operations,
 Including creating a retrieving tickets.
 """
 from fastapi import APIRouter
-from app.services.ticket_service import get_all_tickets, create_ticket
-from app.schemas.ticket import TicketResponse, TicketCreate
+from app.services.ticket_service import get_all_tickets, create_ticket, update_ticket
+from app.schemas.ticket import TicketResponse, TicketCreate, TicketUpdate
 from app.core.logger import logger
 
 router = APIRouter(prefix="/tickets", tags=["tickets"])
@@ -22,3 +22,7 @@ def fetch_tickets():
 def add_ticket(ticket: TicketCreate):
     logger.info(f"POST /tickets called | title={ticket.title}")
     return create_ticket(ticket.title, ticket.description)
+
+@router.put("/{ticket_id}")
+def update_ticket_endpoint(ticket_id:int, ticket: TicketUpdate):
+    return update_ticket(ticket_id, ticket.title, ticket.description)

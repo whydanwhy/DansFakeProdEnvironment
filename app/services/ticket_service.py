@@ -7,6 +7,7 @@ Includes database connection and data transformations.
 from app.db.database import get_connection
 from app.core.logger import logger
 
+#Get tickets API
 def get_all_tickets():
     conn = get_connection()
 
@@ -28,6 +29,7 @@ def get_all_tickets():
 
     return {"tickets": tickets}
 
+# Create tickets API
 def create_ticket(title: str, description: str):
     conn = get_connection()
     cursor = conn.cursor()
@@ -44,3 +46,25 @@ def create_ticket(title: str, description: str):
     logger.info("Ticket inserted successfully")
 
     return {"message": "Ticket created"}
+
+#Update tickets
+def update_ticket(ticket_id: int, title: str, description: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    logger.info("Updating ticket {ticket_id}")
+
+    cursor.execute(
+        "UPDATE tickets SET title = ?, description = ? WHERE id = ?",
+        (title, description, ticket_id)
+    )
+
+    conn.commit()
+
+    if cursor.rowcount == 0:
+        logger.warning(f"Ticket {ticket_id} not found")
+        return {"error": "Ticket not found"}
+    
+    logger.info(f"Ticket {ticket_id} updated successfully")
+
+    return {"message": "Ticket updated"}
