@@ -14,7 +14,12 @@ def get_all_tickets():
 
     cursor = conn.cursor()
 
-    logger.info("Fetching tickets from DB")
+    logger.info(
+        "ticket.fetch",
+        extra={
+            "count": len(tickets)
+        }
+    )
 
     cursor.execute("SELECT id, title FROM tickets")
     rows = cursor.fetchall()
@@ -35,7 +40,12 @@ def create_ticket(title: str, description: str):
     conn = get_connection()
     cursor = conn.cursor()
 
-    logger.info(f"Inserting ticket into DB | title={title}")
+    logger.info(
+            "ticket.create",
+            extra={
+                "title": title
+            }
+    )
 
     cursor.execute(
         "INSERT INTO tickets (title, description, status) VALUES (?, ?, ?)",
@@ -53,7 +63,12 @@ def update_ticket(ticket_id: int, title: str, description: str):
     conn = get_connection()
     cursor = conn.cursor()
 
-    logger.info("Updating ticket {ticket_id}")
+    logger.info(
+        "ticket.update",
+        extra={
+            "ticket_id": ticket_id
+        }
+    )
 
     cursor.execute(
         "UPDATE tickets SET title = ?, description = ? WHERE id = ?",
@@ -75,7 +90,12 @@ def close_ticket(ticket_id: int):
     conn = get_connection()
     cursor = conn.cursor()
 
-    logger.info(f"Closing ticket {ticket_id}")
+    logger.info(
+        "ticket.close",
+        extra={
+            "ticket_id": ticket_id
+        }
+    )
 
     cursor.execute(
         "UPDATE tickets SET status = ? WHERE id = ?",
@@ -88,6 +108,6 @@ def close_ticket(ticket_id: int):
         logger.warning(f"Ticket {ticket_id} not found")
         raise HTTPException(status_code=404, detail="Ticket not found")
     
-    logger.info(f"Ticket {ticket_id} closed succeessfully")
+    logger.info(f"Ticket {ticket_id} closed successfully")
 
     return {"message": "Ticket closed"}
