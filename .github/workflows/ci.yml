@@ -29,4 +29,5 @@ jobs:
       - name: Run basic check
         run: |
           source venv/bin/activate
-          python -m app.main
+          export PYTHONPATH=,
+          pytest
