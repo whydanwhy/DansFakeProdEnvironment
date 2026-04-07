@@ -15,7 +15,9 @@ C) Use ticket logging to reenforce learning to ensure I deeply understand the ap
 FEATURES
 
 - Create tickets via API (POST /tickets)
-- Retrieve tickets ( GET /tickets/)
+- Retrieve tickets via API ( GET /tickets)
+- Update tickets via API (PUT /tickets)
+- Close tickets via API (PATCH /tickets)
 - SQLite database persistence
 - Layered architecture ( Api to Service to DB )
 - Request logging midle ware (and eventually automated ticket creation)

@@ -6,6 +6,7 @@ Includes database connection and data transformations.
 """
 from app.db.database import get_connection
 from app.core.logger import logger
+from fastapi import HTTPException
 
 # Get tickets API
 def get_all_tickets():
@@ -63,7 +64,7 @@ def update_ticket(ticket_id: int, title: str, description: str):
 
     if cursor.rowcount == 0:
         logger.warning(f"Ticket {ticket_id} not found")
-        return {"error": "Ticket not found"}
+        raise HTTPException(status_code=404, detail="Ticket not found")
     
     logger.info(f"Ticket {ticket_id} updated successfully")
 
@@ -85,7 +86,7 @@ def close_ticket(ticket_id: int):
 
     if cursor.rowcount == 0:
         logger.warning(f"Ticket {ticket_id} not found")
-        return {"error": "Ticket not found"}
+        raise HTTPException(status_code=404, detail="Ticket not found")
     
     logger.info(f"Ticket {ticket_id} closed succeessfully")
 
