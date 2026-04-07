@@ -5,7 +5,7 @@ Handles HTTP requests related to ticket operations,
 Including creating a retrieving tickets.
 """
 from fastapi import APIRouter
-from app.services.ticket_service import get_all_tickets, create_ticket, update_ticket
+from app.services.ticket_service import get_all_tickets, create_ticket, update_ticket, close_ticket
 from app.schemas.ticket import TicketResponse, TicketCreate, TicketUpdate
 from app.core.logger import logger
 
@@ -26,3 +26,7 @@ def add_ticket(ticket: TicketCreate):
 @router.put("/{ticket_id}")
 def update_ticket_endpoint(ticket_id:int, ticket: TicketUpdate):
     return update_ticket(ticket_id, ticket.title, ticket.description)
+
+@router.patch("/{ticket_id}/close")
+def close_ticket_endpoint(ticket_id: int):
+    return close_ticket(ticket_id)
