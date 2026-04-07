@@ -6,7 +6,7 @@ Includes database connection and data transformations.
 """
 from app.db.database import get_connection
 from app.core.logger import logger
-from fastapi import HTTPException
+
 
 # Get tickets API
 def get_all_tickets():
@@ -14,24 +14,25 @@ def get_all_tickets():
 
     cursor = conn.cursor()
 
-    logger.info(
-        "ticket.fetch",
-        extra={
-            "count": len(tickets)
-        }
-    )
+    logger.info("ticket.fetch")
 
     cursor.execute("SELECT id, title FROM tickets")
     rows = cursor.fetchall()
 
     tickets = []
+
     for row in rows:
         tickets.append({
             "id": row[0],
             "title": row[1]
         })
 
-    logger.info(f"Fetched {len(tickets)} tickets")
+    logger.info(
+        "ticket.fetched",
+        extra={
+            "count": len(tickets)
+        }
+    )
 
     return {"tickets": tickets}
 
@@ -40,12 +41,7 @@ def create_ticket(title: str, description: str):
     conn = get_connection()
     cursor = conn.cursor()
 
-    logger.info(
-            "ticket.create",
-            extra={
-                "title": title
-            }
-    )
+    logger.info(f"Inserting ticket into DB | title={title}")
 
     cursor.execute(
         "INSERT INTO tickets (title, description, status) VALUES (?, ?, ?)",
@@ -63,12 +59,7 @@ def update_ticket(ticket_id: int, title: str, description: str):
     conn = get_connection()
     cursor = conn.cursor()
 
-    logger.info(
-        "ticket.update",
-        extra={
-            "ticket_id": ticket_id
-        }
-    )
+    logger.info("Updating ticket {ticket_id}")
 
     cursor.execute(
         "UPDATE tickets SET title = ?, description = ? WHERE id = ?",
@@ -79,7 +70,7 @@ def update_ticket(ticket_id: int, title: str, description: str):
 
     if cursor.rowcount == 0:
         logger.warning(f"Ticket {ticket_id} not found")
-        raise HTTPException(status_code=404, detail="Ticket not found")
+        return {"error": "Ticket not found"}
     
     logger.info(f"Ticket {ticket_id} updated successfully")
 
@@ -90,12 +81,7 @@ def close_ticket(ticket_id: int):
     conn = get_connection()
     cursor = conn.cursor()
 
-    logger.info(
-        "ticket.close",
-        extra={
-            "ticket_id": ticket_id
-        }
-    )
+    logger.info(f"Closing ticket {ticket_id}")
 
     cursor.execute(
         "UPDATE tickets SET status = ? WHERE id = ?",
@@ -106,8 +92,8 @@ def close_ticket(ticket_id: int):
 
     if cursor.rowcount == 0:
         logger.warning(f"Ticket {ticket_id} not found")
-        raise HTTPException(status_code=404, detail="Ticket not found")
+        return {"error": "Ticket not found"}
     
-    logger.info(f"Ticket {ticket_id} closed successfully")
+    logger.info(f"Ticket {ticket_id} closed succeessfully")
 
     return {"message": "Ticket closed"}
