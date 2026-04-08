@@ -6,12 +6,21 @@ Initialises the FASTAPI application, sets up logging, middle ware and registers 
 import time
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import tickets
 from app.db.database import init_db
 from app.core.logger import logger
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 logger.info("Starting application")
 
