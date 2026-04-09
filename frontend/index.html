@@ -9,22 +9,35 @@
 ```
 <h1>Tickets</h1>
 
+<button onclick="goToCreate()">+ New Ticket</button>
+
+<script>
+
+</script>
+
+<h1>Tickets</h1>
+
 <table border="1" id="ticketTable">
     <thead>
         <tr>
             <th>ID</th>
             <th>Title</th>
+            <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody></tbody>
 </table>
 
 <script>
+// Data load
     async function loadTickets() {
         const response = await fetch("http://localhost:8000/tickets/");
         const data = await response.json();
 
+        
         const tableBody = document.querySelector("#ticketTable tbody");
+        tableBody.innerHTML = ""; // clear table first
 
         data.tickets.forEach(ticket => {
             const row = document.createElement("tr");
@@ -32,16 +45,32 @@
             row.innerHTML = `
                 <td>${ticket.id}</td>
                 <td>${ticket.title}</td>
+                <td>${ticket.status || "open"}</td>
+                <td>
+                    <button onclick="closeTicket(${ticket.id})">Close</button>
+                </td>
             `;
 
             tableBody.appendChild(row);
         });
     }
+// actions
+// ticket closeTicket
+async function closeTicket(id) {
+    await fetch(`http://localhost:8000/tickets/${id}/close`, {
+        method: "PATCH"
+    });
 
+    loadTickets(); // refresh table
+}
+//Ticket create
+function goToCreate() {
+    window.location.href = "create.html";
+}
+// Initialisation
     loadTickets();
 </script>
 ```
 
 </body>
 </html>
-

@@ -13,10 +13,11 @@ def get_all_tickets():
     conn = get_connection()
 
     cursor = conn.cursor()
-
+    cursor.execute("PRAGMA table_info(tickets)")
+    print(cursor.fetchall())
     logger.info("ticket.fetch")
 
-    cursor.execute("SELECT id, title FROM tickets")
+    cursor.execute("SELECT id, title, status FROM tickets")
     rows = cursor.fetchall()
 
     tickets = []
@@ -24,7 +25,8 @@ def get_all_tickets():
     for row in rows:
         tickets.append({
             "id": row[0],
-            "title": row[1]
+            "title": row[1],
+            "status": row[2]
         })
 
     logger.info(
@@ -59,7 +61,7 @@ def update_ticket(ticket_id: int, title: str, description: str):
     conn = get_connection()
     cursor = conn.cursor()
 
-    logger.info("Updating ticket {ticket_id}")
+    logger.info(f"Updating ticket {ticket_id}")
 
     cursor.execute(
         "UPDATE tickets SET title = ?, description = ? WHERE id = ?",

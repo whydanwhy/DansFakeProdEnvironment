@@ -5,6 +5,7 @@ from typing import List
 class Ticket(BaseModel):
     id: int
     title: str
+    status: str
 
 
 class TicketCreate(BaseModel):
