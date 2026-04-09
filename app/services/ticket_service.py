@@ -99,3 +99,20 @@ def close_ticket(ticket_id: int):
     logger.info(f"Ticket {ticket_id} closed succeessfully")
 
     return {"message": "Ticket closed"}
+
+# Get Ticket
+def get_ticket_by_id(ticket_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT id, title, description, status FROM tickets WHERE id = ?",
+        (ticket_id,)
+    )
+
+    row = cursor.fetchone()
+    conn.close()
+
+    logger.info(f"Ticket {ticket_id} retrieved successfully")
+
+    return row

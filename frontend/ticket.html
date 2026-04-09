@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Detail</title>
+</head>
+<body>
+
+    <h1>Ticket Detail</h1>
+
+    <div id="ticket-container">
+        <p><strong>ID:</strong> <span id="ticket-id"></span></p>
+        <p><strong>Title:</strong> <span id="ticket-title"></span></p>
+        <p><strong>Description:</strong> <span id="ticket-description"></span></p>
+        <p><strong>Status:</strong> <span id="ticket-status"></span></p>
+    </div>
+
+    <p id="loading">Loading ticket...</p>
+    <p id="error" style="color:red;"></p>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const ticketId = params.get("id");
+
+        const loadingEl = document.getElementById("loading");
+        const errorEl = document.getElementById("error");
+
+        if (!ticketId) {
+            errorEl.textContent = "No ticket ID provided in URL";
+            loadingEl.style.display = "none";
+        }
+
+        async function loadTicket() {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/tickets/${ticketId}`);
+
+                if (!response.ok) {
+                    throw new Error("Ticket not found");
+                }
+
+                const data = await response.json();
+
+                // Populate fields
+                document.getElementById("ticket-id").textContent = data.id;
+                document.getElementById("ticket-title").textContent = data.title;
+                document.getElementById("ticket-description").textContent = data.description;
+                document.getElementById("ticket-status").textContent = data.status;
+
+                loadingEl.style.display = "none";
+
+            } catch (error) {
+                console.error(error);
+                loadingEl.style.display = "none";
+                errorEl.textContent = "Failed to load ticket";
+            }
+        }
+
+        if (ticketId) {
+            loadTicket();
+        }
+    </script>
+
+</body>
+</html>
