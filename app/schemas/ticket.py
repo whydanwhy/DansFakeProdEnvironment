@@ -20,3 +20,9 @@ class TicketResponse(BaseModel):
 class TicketUpdate(BaseModel):
     title: str
     description: str
+
+class TicketDetail(BaseModel):
+    id: int
+    title: str
+    description: str
+    status: str
