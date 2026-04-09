@@ -6,14 +6,22 @@
 </head>
 <body>
 
-    <h1>Ticket Detail</h1>
+    <h1 id="ticket-title"></h1>
 
-    <div id="ticket-container">
-        <p><strong>ID:</strong> <span id="ticket-id"></span></p>
-        <p><strong>Title:</strong> <span id="ticket-title"></span></p>
-        <p><strong>Description:</strong> <span id="ticket-description"></span></p>
-        <p><strong>Status:</strong> <span id="ticket-status"></span></p>
-    </div>
+    <p>
+      <strong>Ticket Number:</strong> 
+      <span id="ticket-id"></span>
+    </p>
+
+    <p>
+      <strong>Status:</strong> 
+      <span id="ticket-status"></span>
+    </p>
+
+<hr/>
+
+    <h3>Description</h3>
+    <p id="ticket-description"></p>
 
     <p id="loading">Loading ticket...</p>
     <p id="error" style="color:red;"></p>
