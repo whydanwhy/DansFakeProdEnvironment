@@ -44,7 +44,7 @@
 
             row.innerHTML = `
                 <td>${ticket.id}</td>
-                <td>${ticket.title}</td>
+                <a href="ticket.html?id=${ticket.id}">${ticket.title}</a>
                 <td>${ticket.status || "open"}</td>
                 <td>
                     <button onclick="closeTicket(${ticket.id})">Close</button>
@@ -66,6 +66,10 @@ async function closeTicket(id) {
 //Ticket create
 function goToCreate() {
     window.location.href = "create.html";
+}
+// view ticket via link
+function viewTicket(id) {
+    window.location.href = `ticket.html?id=${id}`;
 }
 // Initialisation
     loadTickets();
