@@ -4,9 +4,11 @@ Database config and connection management
 Initialises the utilities for the app.
 """
 import sqlite3
+import os
+DB_PATH = os.getenv("DB_PATH", "data/app.db")
 
 def get_connection():
-    return sqlite3.connect("tickets.db")
+    return sqlite3.connect(DB_PATH)
 
 def init_db():
     conn = get_connection()
