@@ -116,3 +116,16 @@ def get_ticket_by_id(ticket_id: int):
     logger.info(f"Ticket {ticket_id} retrieved successfully")
 
     return row
+
+# Add notes
+def add_note(ticket_id: int, content: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO notes (ticket_id, content)
+        VALUES (?, ?)    
+    """, (ticket_id,content))
+
+    conn.commit()
+    conn.close()

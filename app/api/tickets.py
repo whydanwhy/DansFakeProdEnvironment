@@ -10,7 +10,8 @@ from app.services.ticket_service import (
     create_ticket,
     update_ticket,
     close_ticket,
-    get_ticket_by_id
+    get_ticket_by_id,
+    add_note
 )
 from app.schemas.ticket import (
     TicketResponse,
@@ -70,3 +71,14 @@ def fetch_ticket(ticket_id: int):
         "description": ticket[2],
         "status": ticket[3]
     }
+
+
+@router.post("/tickets/{ticket_id}/notes", status_code=status.HTTP_200_OK)
+def create_note(ticket_id: int, content: str):
+    
+    note_updated=add_note(ticket_id, content)
+
+    if not note_updated:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    
+    return note_updated
