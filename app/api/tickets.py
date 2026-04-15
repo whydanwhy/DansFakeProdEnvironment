@@ -57,24 +57,7 @@ def close_ticket_endpoint(ticket_id: int):
     return closed
 
 
-@router.get("/{ticket_id}", response_model=TicketDetail, status_code=status.HTTP_200_OK)
-def fetch_ticket(ticket_id: int):
-    logger.info(f"GET /tickets/{ticket_id} called")
-
-    ticket = get_ticket_by_id(ticket_id)
-
-    if not ticket:
-        raise HTTPException(status_code=404, detail="Ticket not found")
-
-    return {
-        "id": ticket[0],
-        "title": ticket[1],
-        "description": ticket[2],
-        "status": ticket[3]
-    }
-
-
-@router.post("/tickets/{ticket_id}/notes", status_code=status.HTTP_200_OK)
+@router.post("/{ticket_id}/notes", status_code=status.HTTP_200_OK)
 def create_note(ticket_id: int, content: str):
     
     note_updated=add_note(ticket_id, content)
@@ -85,7 +68,7 @@ def create_note(ticket_id: int, content: str):
     return note_updated
 
 
-@router.get("/tickets/{ticket_id}", status_code=status.HTTP_200_OK)
+@router.get("/{ticket_id}", status_code=status.HTTP_200_OK)
 def get_ticket(ticket_id: int):
     print(">>> USING NEW ENDPOINT <<<")
     ticket = get_ticket_with_notes(ticket_id)
