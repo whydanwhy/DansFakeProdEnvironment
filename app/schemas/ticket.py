@@ -26,3 +26,6 @@ class TicketDetail(BaseModel):
     title: str
     description: str
     status: str
+
+class NoteCreate(BaseModel):
+    content: str

@@ -18,7 +18,8 @@ from app.schemas.ticket import (
     TicketResponse,
     TicketCreate,
     TicketUpdate,
-    TicketDetail
+    TicketDetail,
+    NoteCreate
 )
 from app.core.logger import logger
 
@@ -58,9 +59,9 @@ def close_ticket_endpoint(ticket_id: int):
 
 
 @router.post("/{ticket_id}/notes", status_code=status.HTTP_200_OK)
-def create_note(ticket_id: int, content: str):
-    
-    note_updated=add_note(ticket_id, content)
+def create_note(ticket_id: int, note: NoteCreate):
+    print("NOTE RECEIVED:", note)
+    note_updated=add_note(ticket_id, note.content)
 
     if not note_updated:
         raise HTTPException(status_code=404, detail="Ticket not found")

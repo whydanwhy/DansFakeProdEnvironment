@@ -91,12 +91,65 @@ document.addEventListener("DOMContentLoaded", () => {
         loadingEl.style.display = "none";
     }
 
+const noteInput = document.getElementById("note-input");
+const addNoteBtn = document.getElementById("add-note-btn");
+const noteError = document.getElementById("note-error");
+
+addNoteBtn.addEventListener("click", async () => {
+    const content = noteInput.value.trim();
+
+    if (!content) {
+        noteError.textContent = "Note cannot be empty";
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/tickets/${ticketId}/notes`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ content })
+        });
+
+       if (response.ok) {
+    noteInput.value = "";
+    noteError.textContent = "";
+    loadTicket(); // refresh notes
+} else {
+    const errorText = await response.text();
+    console.error("Backend error:", errorText);
+    noteError.textContent = "Error adding note";
+
+}
+
+        // Clear input
+        noteInput.value = "";
+        noteError.textContent = "";
+
+        // Reload ticket (refresh notes)
+        loadTicket();
+
+    } catch (error) {
+        console.error(error);
+        noteError.textContent = "Error adding note";
+    }
+});
+
 });
 </script>
 
 <h2>Notes</h2>
 <ul id="notes-list"></ul>
 <p id="no-notes" style="display:none;">No notes yet.</p>
+
+<h3>Add Note</h3>
+
+<textarea id="note-input" placeholder="Write a note..."></textarea>
+<br/>
+<button id="add-note-btn">Add Note</button>
+
+<p id="note-error" style="color:red;"></p>
 
 </body>
 </html>
