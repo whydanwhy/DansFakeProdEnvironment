@@ -129,3 +129,49 @@ def add_note(ticket_id: int, content: str):
 
     conn.commit()
     conn.close()
+
+
+#Get tickets with notes
+def get_ticket_with_notes(ticket_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # Ticket
+    cursor.execute("""
+        SELECT id, title, description, status, created_at
+        FROM tickets
+        WHERE id = ?
+    """, (ticket_id,))
+    
+    ticket = cursor.fetchone()
+
+    if not ticket:
+        conn.close()
+        return None
+
+    # Notes
+    cursor.execute("""
+        SELECT id, content, created_at
+        FROM notes
+        WHERE ticket_id = ?
+        ORDER BY created_at DESC
+    """, (ticket_id,))
+
+    notes = cursor.fetchall()
+
+    conn.close()
+
+    return {
+        "id": ticket[0],
+        "title": ticket[1],
+        "description": ticket[2],
+        "status": ticket[3],
+        "created_at": ticket[4],
+        "notes": [
+            {
+                "id": n[0],
+                "content": n[1],
+                "created_at": n[2]
+            } for n in notes
+        ]
+    }

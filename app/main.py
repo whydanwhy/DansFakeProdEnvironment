@@ -11,8 +11,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api import tickets
 from app.db.database import init_db
 from app.core.logger import logger
+import os
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
+
+app.mount(
+    "/static",
+    StaticFiles(directory=os.path.join(os.getcwd(), "frontend")),
+    name="static"
+)
+
 
 app.add_middleware(
     CORSMiddleware,

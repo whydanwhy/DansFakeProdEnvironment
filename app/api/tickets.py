@@ -11,7 +11,8 @@ from app.services.ticket_service import (
     update_ticket,
     close_ticket,
     get_ticket_by_id,
-    add_note
+    add_note,
+    get_ticket_with_notes
 )
 from app.schemas.ticket import (
     TicketResponse,
@@ -82,3 +83,16 @@ def create_note(ticket_id: int, content: str):
         raise HTTPException(status_code=404, detail="Ticket not found")
     
     return note_updated
+
+
+@router.get("/tickets/{ticket_id}", status_code=status.HTTP_200_OK)
+def get_ticket(ticket_id: int):
+    print(">>> USING NEW ENDPOINT <<<")
+    ticket = get_ticket_with_notes(ticket_id)
+
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    
+    return ticket
+
+
